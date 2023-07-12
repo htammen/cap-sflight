@@ -10,7 +10,11 @@ service TravelService @(path:'/processor') {
   ])
   entity Travel as projection on my.Travel actions {
     action createTravelByTemplate() returns Travel;
-    action rejectTravel();
+    @(Common.SideEffects.TargetEntities: ['/TravelService.EntityContainer/Travel'])
+    action rejectTravel(times: Integer  @UI.ParameterDefaultValue: 1  @assert.range: [
+      1,
+      10
+    ]  );
     action acceptTravel();
     action deductDiscount( percent: Percentage not null ) returns Travel;
   };
